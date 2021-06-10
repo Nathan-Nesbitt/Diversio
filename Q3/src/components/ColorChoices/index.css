@@ -1,0 +1,12 @@
+.colorChoices {
+	margin-top: 10px;
+	display: flex;
+	flex-direction: row;
+}
+
+.colorChoiceBox {
+	height: 20px;
+	width: 20px;
+	background-color: grey;
+	margin: 2px;
+}

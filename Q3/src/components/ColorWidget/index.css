@@ -1,0 +1,10 @@
+.color-widget {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.color-widget-title {
+    font-family: sans-serif;
+}
