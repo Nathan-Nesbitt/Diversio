@@ -27,11 +27,14 @@ const ColorWidget = (props) => {
     you are welcome to leave this Promise here as is.
     */
     // START OF DATA FETCHING CODE
-    const [ colors, setColors ] = useState(null);
+    const [ colors, setColors ] = useState([]);
+    const [ mainColor, setMainColor ] = useState();
 
     fetchColors
         .then((res) => {
-            setColors(res);
+            setColors(res["data"]["colorChoices"]);
+            if(!mainColor)
+                setMainColor(res["data"]["colorChoices"][0])
         })
         .catch(
         (e) => {
@@ -41,15 +44,13 @@ const ColorWidget = (props) => {
     // END OF DATA FETCHING CODE 
 
     return (
+        
         <div className="color-widget">
             <div className="color-widget-title">
-                <h2>I am a placeholder, change this file or delete it entirely and start over</h2>
+                <h1>Color Picker Widget</h1>
             </div>
-            <ColorBox/>
-            <ColorChoices/>
-            <div>
-                {JSON.stringify(colors)}
-            </div>
+            <ColorBox color={mainColor}/>
+            <ColorChoices data={colors} callback={setMainColor} selected={mainColor}/>
         </div> 
     );
 }

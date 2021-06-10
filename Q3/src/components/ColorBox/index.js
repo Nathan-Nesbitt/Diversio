@@ -1,14 +1,27 @@
 import React from 'react';
 import './index.css';
 
-/* placeholder, use or delete! */
+class ColorBox extends React.Component {
 
-const ColorBox = () => {
-	return (
-		<div className="colorBox">
+	constructor(props) {
+		super(props);
+		this.state = {
+			"color": props.color
+		};
+	}
 
-		</div>
-	);
+	componentDidUpdate(prevProps) {
+		if (this.props.color !== prevProps.color)
+			this.setState({"color": this.props.color})
+	} 
+
+	render() {
+		const {color} = this.state;
+		return (
+			<div className="colorBox" style={{backgroundColor: color}}>
+			</div>
+		);
+	}
 }
 
 export default ColorBox;
