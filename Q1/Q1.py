@@ -16,11 +16,13 @@ the variable `st`.
 I also fixed the variable `LonDir` to be camelcase `lonDir` to match the rest 
 of the variables.
 
+Finally I removed the unused imports, as you are importing `strftime` and 
+`localtime` right from `time`, there is no need to import the full `time` library.
+`re` was just not used, removed as it is overhead.
+
 """
 
-import re
 import requests
-import time
 from time import strftime
 from time import localtime
 import json
