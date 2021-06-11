@@ -13,6 +13,9 @@ I also removed the use of r.status_code on `if int() == 200:` and
 `print("Request was unsuccessful: {}".format(st))` as it was already defined as
 the variable `st`. 
 
+I also fixed the variable `LonDir` to be camelcase `lonDir` to match the rest 
+of the variables.
+
 """
 
 import re
@@ -36,12 +39,12 @@ if int(st) == 200:
         latDir = "N"
 
     longitude = d["iss_position"]["longitude"]
-    LonDir = "W"
+    lonDir = "W"
     if float(longitude) > 0:
-        LonDir = "E"
+        lonDir = "E"
 
     print("Current position of International Space Station at {}".format(time))
     print("Latitude: {}° {}".format(latitude, latDir))
-    print("Longitude: {}° {}".format(longitude, LonDir))
+    print("Longitude: {}° {}".format(longitude, lonDir))
 else:
     print("Request was unsuccessful: {}".format(st))
