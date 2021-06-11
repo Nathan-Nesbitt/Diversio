@@ -68,21 +68,39 @@ def get_data(url):
     # Splits the URL and gets the params
     split_url = url.split("/")
 
+    if len(split_url) > 5 or len(split_url) < 4:
+        raise ValueError(
+            "The input URL contains too many params. You sure this is a valid URL?"
+        )
+
+    name = None
+    id = None
+
     # If the `name` wasn't provided we scrape for it
     if len(split_url) == 4:
         id = split_url[3]
         page = requests.get(url)
         soup = BeautifulSoup(page.content, "html.parser")
-        name = soup.find("input", {"id": "pspi"})["value"]
+        name_element = soup.find("input", {"id": "pspi"})
+        if name_element:
+            name = name_element["value"]
     else:
         name = split_url[3]
         id = split_url[4]
+
+    if not name or not id:
+        raise ValueError(
+            "The input URL did not contain a valid ID or name. You sure this is a valid URL?"
+        )
 
     # Then we request the API URL with the 2 params
     r = requests.get(
         "https://stats.uptimerobot.com/api/getMonitor/{}?m={}".format(name, id)
     )
     d = json.loads(r.text)
+
+    if "monitor" not in d:
+        raise ValueError("Name or ID not valid. You sure this is a valid URL?")
 
     sorted_values = sorted(d["monitor"]["responseTimes"], key=lambda k: k["value"])
 
@@ -127,17 +145,21 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    results = get_data(args.url)
+    try:
+        results = get_data(args.url)
 
-    # Prints out the results
-    print(
-        "Blog received highest ping on {} with value {}ms in last 90 days".format(
-            results["max"]["datetime"], results["max"]["value"]
+        # Prints out the results
+        print(
+            "Blog received highest ping on {} with value {}ms in last 90 days".format(
+                results["max"]["datetime"], results["max"]["value"]
+            )
         )
-    )
-    print(
-        "The min ping was {}ms on {}".format(
-            results["min"]["value"], results["min"]["datetime"]
+        print(
+            "The min ping was {}ms on {}".format(
+                results["min"]["value"], results["min"]["datetime"]
+            )
         )
-    )
-    print("The median was {}ms".format(results["median"]))
+        print("The median was {}ms".format(results["median"]))
+
+    except ValueError as e:
+        print(e)
